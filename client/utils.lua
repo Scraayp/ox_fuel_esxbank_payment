@@ -51,17 +51,15 @@ function utils.getVehiclePetrolCapBoneIndex(vehicle)
 end
 
 ---@return number
-exports.ox_fuel:setMoneyCheck(function()
+local function defaultMoneyCheck()
 	local accounts = ESX.GetPlayerData().accounts
-
 	for i = 1, #accounts do
 		if accounts[i].name == 'bank' then
 			return accounts[i].money
 		end
 	end
-
 	return 0
-end)
+end
 
 utils.getMoney = defaultMoneyCheck
 
