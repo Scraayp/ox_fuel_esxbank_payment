@@ -22,7 +22,7 @@ end
 ---@param playerId number
 ---@param price number
 ---@return boolean?
-exports.ox_fuel:setPaymentMethod(function(playerId, amount)
+local function defaultPaymentMethod(playerId, amount)
 	local xPlayer = ESX.GetPlayerFromId(playerId)
 	local bankAmount = xPlayer.getAccount('bank').money
 
@@ -35,7 +35,9 @@ exports.ox_fuel:setPaymentMethod(function(playerId, amount)
 		type = 'error',
 		description = locale('not_enough_money', amount - bankAmount)
 	})
-end)
+end
+
+local payMoney = defaultPaymentMethod
 
 exports('setPaymentMethod', function(fn)
 	payMoney = fn or defaultPaymentMethod
