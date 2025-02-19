@@ -22,20 +22,20 @@ end
 ---@param playerId number
 ---@param price number
 ---@return boolean?
-local function defaultPaymentMethod(playerId, price)
-	local success = ox_inventory:RemoveItem(playerId, 'money', price)
+exports.ox_fuel:setPaymentMethod(function(playerId, amount)
+	local xPlayer = ESX.GetPlayerFromId(playerId)
+	local bankAmount = xPlayer.getAccount('bank').money
 
-	if success then return true end
-
-	local money = ox_inventory:GetItemCount(source, 'money')
+	if bankAmount >= amount then
+		xPlayer.removeAccountMoney('bank', amount)
+		return true
+	end
 
 	TriggerClientEvent('ox_lib:notify', source, {
 		type = 'error',
-		description = locale('not_enough_money', price - money)
+		description = locale('not_enough_money', amount - bankAmount)
 	})
-end
-
-local payMoney = defaultPaymentMethod
+end)
 
 exports('setPaymentMethod', function(fn)
 	payMoney = fn or defaultPaymentMethod
